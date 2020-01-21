@@ -9,6 +9,7 @@ return function (App $app) {
 
     // 一覧表示
     $app->get('/tickets', function (Request $request, Response $response) {
+        return $response->write('tickets');
     });
 
     // 新規作成用フォームの表示
@@ -18,6 +19,10 @@ return function (App $app) {
 
     // 新規作成
     $app->post('/tickets', function (Request $request, Response $response) {
+        $subject = $request->getParsedBodyParam('subject');
+        // ここに保存の処理を書く
+        // 保存が正常にできたら一覧ページへリダイレクトする
+        return $response->withRedirect('/tickets');
     });
 
     // 表示
