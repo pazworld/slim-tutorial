@@ -13,6 +13,7 @@ return function (App $app) {
 
     // 新規作成用フォームの表示
     $app->get('/tickets/create', function (Request $request, Response $response) {
+        return $this->renderer->render($response, 'tasks/create.phtml');
     });
 
     // 新規作成
