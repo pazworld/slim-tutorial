@@ -16,7 +16,7 @@ return function (App $app) {
             $tickets[] = $row;
         }
         $data = ['tickets' => $tickets];
-        return $this->renderer->render($response, 'tickets/index.phtml', $data);
+        return $this->renderer->render($response, 'tasks/index.phtml', $data);
     });
 
     // 新規作成用フォームの表示
@@ -50,7 +50,7 @@ return function (App $app) {
             return $response->withStatus(404)->write("not found");
         }
         $data = ['ticket' => $ticket];
-        return $this->renderer->render($response, 'tickets/show.phtml', $data);
+        return $this->renderer->render($response, 'tasks/show.phtml', $data);
     });
 
     // 編集用フォームの表示
