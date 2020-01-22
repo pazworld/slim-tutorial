@@ -41,7 +41,16 @@ return function (App $app) {
     });
 
     // 表示
-    $app->get('/tickets/{id}', function (Request $request, Response $response) {
+    $app->get('/tickets/{id}', function (Request $request, Response $response, array $args) {
+        $sql = 'SELECT * FROM tickets WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $args['id']]);
+        $ticket = $stmt->fetch();
+        if (!$ticket) {
+            return $response->withStatus(404)->write("not found");
+        }
+        $data = ['ticket' => $ticket];
+        return $this->renderer->render($response, 'tickets/show.phtml', $data);
     });
 
     // 編集用フォームの表示

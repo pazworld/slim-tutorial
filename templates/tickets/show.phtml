@@ -10,13 +10,22 @@
   <h1>チケット管理</h1>
   <div class="card">
     <div class="card-body">
-      <h2 class="card-title">チケット一覧</h2>
+      <h2 class="card-title">チケット詳細</h2>
       <div class="card-text">
-        <ul class="list-group">
-            <?php foreach ($tickets as $ticket): ?>
-              <li class="list-group-item"><a href="/tickets/<?= $ticket['id'] ?>"><?= e($ticket['subject']) ?></a></li>
-            <?php endforeach; ?>
-        </ul>
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>件名</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><?= e($ticket['id']) ?></td>
+            <td><?= e($ticket['subject']) ?></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
