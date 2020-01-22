@@ -9,7 +9,14 @@ return function (App $app) {
 
     // 一覧表示
     $app->get('/tickets', function (Request $request, Response $response) {
-        return $response->write('tickets');
+        $sql = 'SELECT * FROM tickets';
+        $stmt = $this->db->query($sql);
+        $tickets = [];
+        while ($row = $stmt->fetch()) {
+            $tickets[] = $row;
+        }
+        $data = ['tickets' => $tickets];
+        return $this->renderer->render($response, 'tickets/index.phtml', $data);
     });
 
     // 新規作成用フォームの表示
