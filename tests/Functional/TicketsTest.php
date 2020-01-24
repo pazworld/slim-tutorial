@@ -23,4 +23,18 @@ class TicketsTest extends BaseTestCase
         $this->assertEquals('/tickets', (string)$response->getHeaderLine('Location'));
         $this->assertEquals('テストチケット', $ticket['subject']);
     }
+
+protected function setUp()
+    {
+        parent::setUp();
+
+        $this->container['db']->beginTransaction();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->container['db']->rollback();
+    }
 }
