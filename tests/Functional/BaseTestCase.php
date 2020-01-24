@@ -33,6 +33,8 @@ class BaseTestCase extends TestCase
      */
     public function runApp($requestMethod, $requestUri, $requestData = null)
     {
+        $app = $this->app;
+        
         // Create a mock environment for testing with
         $environment = Environment::mock(
             [
@@ -52,15 +54,15 @@ class BaseTestCase extends TestCase
         // Set up a response object
         $response = new Response();
 
-        // Use the application settings
-        $settings = require __DIR__ . '/../../src/settings.php';
+        // // Use the application settings
+        // $settings = require __DIR__ . '/../../src/settings.php';
 
-        // Instantiate the application
-        $app = new App($settings);
+        // // Instantiate the application
+        // $app = new App($settings);
 
-        // Set up dependencies
-        $dependencies = require __DIR__ . '/../../src/dependencies.php';
-        $dependencies($app);
+        // // Set up dependencies
+        // $dependencies = require __DIR__ . '/../../src/dependencies.php';
+        // $dependencies($app);
 
         // Register middleware
         if ($this->withMiddleware) {
@@ -77,5 +79,33 @@ class BaseTestCase extends TestCase
 
         // Return the response
         return $response;
+    }
+
+    /**
+     * @var App
+     */
+    private $app;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        // Use the application settings
+        $settings = require __DIR__ . '/../../src/settings.php';
+
+        // Instantiate the application
+        $app = new App($settings);
+
+        // Set up dependencies
+        $dependencies = require __DIR__ . '/../../src/dependencies.php';
+        $dependencies($app);
+        
+        $this->app = $app;
+        $this->container = $this->app->getContainer();
     }
 }
