@@ -22,8 +22,7 @@
     },
     "autoload": {
 	"psr-4": {
-	    "Classes\\": "src/classes/",
-	    "Classes\\Controllers\\": "src/classes/controllers/"
+	    "Classes\\": "src/classes/"
 	},
 	"files": ["src/helpers.php"]
     },
