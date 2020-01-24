@@ -3,21 +3,14 @@
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Classes\Controllers\TicketsController;
 
 return function (App $app) {
     $container = $app->getContainer();
 
     // 一覧表示
-    $app->get('/tickets', function (Request $request, Response $response) {
-        $sql = 'SELECT * FROM tickets';
-        $stmt = $this->db->query($sql);
-        $tickets = [];
-        while ($row = $stmt->fetch()) {
-            $tickets[] = $row;
-        }
-        $data = ['tickets' => $tickets];
-        return $this->renderer->render($response, 'tasks/index.phtml', $data);
-    });
+    $app->get('/tickets', TicketsController::class . ':index');
+    //$app->get('/tickets', TicketsController:index);
 
     // 新規作成用フォームの表示
     $app->get('/tickets/create', function (Request $request, Response $response) {
