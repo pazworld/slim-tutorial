@@ -22,7 +22,7 @@ return function (App $app) {
 
     // database
     $container['db'] = function ($c) {
-        $pdo = new PDO('sqlite:../database/database.sqlite3');
+        $pdo = new PDO('sqlite:' . __DIR__ . '/../database/database.sqlite3');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         return $pdo;
