@@ -43,12 +43,10 @@ class TicketsController extends Controller
     
     // 表示
     public function show(Request $request, Response $response, array $args) {
-        $sql = 'SELECT * FROM tickets WHERE id = :id';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $args['id']]);
-        $ticket = $stmt->fetch();
-        if (!$ticket) {
-            return $response->withStatus(404)->write("not found");
+        try {
+            $ticket = $this->fetchTicket($args['id']);
+        } catch (\Exception $e) {
+            return $response->withStatus(404)->write($e->getMessage());
         }
         $data = ['ticket' => $ticket];
         return $this->renderer->render($response, 'tasks/show.phtml', $data);
@@ -56,12 +54,10 @@ class TicketsController extends Controller
 
     // 編集用フォームの表示
     public function edit(Request $request, Response $response, array $args) {
-        $sql = 'SELECT * FROM tickets WHERE id = :id';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $args['id']]);
-        $ticket = $stmt->fetch();
-        if (!$ticket) {
-            return $response->withStatus(404)->write('not found');
+        try {
+            $ticket = $this->fetchTicket($args['id']);
+        } catch (\Exception $e) {
+            return $response->withStatus(404)->write($e->getMessage());
         }
         $data = ['ticket' => $ticket];
         return $this->renderer->render($response, 'tasks/edit.phtml', $data);
@@ -69,12 +65,10 @@ class TicketsController extends Controller
 
     // 更新
     public function update(Request $request, Response $response, array $args) {
-        $sql = 'SELECT * FROM tickets WHERE id = :id';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $args['id']]);
-        $ticket = $stmt->fetch();
-        if (!$ticket) {
-            return $response->withStatus(404)->write('not found');
+        try {
+            $ticket = $this->fetchTicket($args['id']);
+        } catch (\Exception $e) {
+            return $response->withStatus(404)->write($e->getMessage());
         }
         $ticket['subject'] = $request->getParsedBodyParam('subject');
         $stmt = $this->db->prepare('UPDATE tickets SET subject = :subject WHERE id = :id');
@@ -84,15 +78,25 @@ class TicketsController extends Controller
 
     // 削除
     public function delete(Request $request, Response $response, array $args) {
-        $sql = 'SELECT * FROM tickets WHERE id = :id';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $args['id']]);
-        $ticket = $stmt->fetch();
-        if (!$ticket) {
-            return $response->withStatus(404)->write('not found');
+        try {
+            $ticket = $this->fetchTicket($args['id']);
+        } catch (\Exception $e) {
+            return $response->withStatus(404)->write($e->getMessage());
         }
         $stmt = $this->db->prepare('DELETE FROM tickets WHERE id = :id');
         $stmt->execute(['id' => $ticket['id']]);
         return $response->withRedirect('/tickets');
+    }
+
+    // idによる検索
+    private function fetchTicket($id): array {
+        $sql = 'SELECT * FROM tickets WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $ticket = $stmt->fetch();
+        if (!$ticket) {
+            throw new \Exception('not found');
+        }
+        return $ticket;
     }
 }
